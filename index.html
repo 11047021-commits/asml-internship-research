@@ -160,11 +160,54 @@ td.num,th.num{text-align:right;font-family:var(--font-mono);font-variant-numeric
 footer{padding-block:32px 48px;font-size:13px;color:var(--muted)}
 footer .wrap{display:grid;gap:6px}
 
+/* ---- motion ---- */
+@keyframes fadeUp{from{opacity:.25;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes scan{0%{transform:translateY(-10%);opacity:0}8%{opacity:1}92%{opacity:1}100%{transform:translateY(110%);opacity:0}}
+@keyframes cardIn{from{opacity:.3;transform:translateY(8px)}to{opacity:1;transform:none}}
+header.hero{position:relative;overflow:hidden}
+header.hero::after{content:"";position:absolute;left:0;right:0;top:0;height:120px;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(56,189,248,.10) 70%,rgba(56,189,248,.55) 99%,transparent);
+  animation:scan 2.4s cubic-bezier(.4,0,.2,1) .2s 1 both}
+.hero .eyebrow{animation:fadeUp .6s ease .1s both}
+.hero h1{animation:fadeUp .8s ease .25s both}
+.hero .lede{animation:fadeUp .8s ease .4s both}
+.hero .facts{animation:fadeUp .8s ease .55s both}
+.reveal{opacity:.25;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+.case,.job,ol.steps li,.pg .box,.metric,.panel{transition:border-color .3s,background-color .3s,transform .3s}
+.case:hover,.job:hover{border-color:var(--lamp);background:var(--surface-2);transform:translateY(-2px)}
+.job{animation:cardIn .35s ease both}
+.stackbar span,.skill .bars span{transition:width 1.2s cubic-bezier(.2,.7,.2,1),left 1.2s cubic-bezier(.2,.7,.2,1)}
+.metric:hover{background:var(--surface-2)}
+/* process stepper */
+ol.steps li{cursor:pointer}
+ol.steps li[aria-selected="true"]{border-color:var(--lamp);background:var(--surface-2)}
+ol.steps li[aria-selected="true"]::before{background:var(--lamp);color:var(--bg)}
+.step-detail{background:var(--surface);border:1px solid var(--line);border-left:2px solid var(--lamp);border-radius:0;padding:14px 16px;min-height:72px}
+.step-detail p{animation:fadeUp .3s ease both}
+.step-detail .k{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;color:var(--lamp-ink);text-transform:uppercase;display:block;margin-bottom:4px}
+/* case carousel */
+.carousel{display:grid;gap:12px}
+.track{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(260px,calc((100% - 32px)/3));gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:2px}
+.track::-webkit-scrollbar{display:none}
+.track .case{scroll-snap-align:start}
+.car-nav{display:flex;align-items:center;gap:10px}
+.car-nav button{font:inherit;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;transition:background .2s,border-color .2s}
+.car-nav button:hover{border-color:var(--lamp);background:var(--surface-2)}
+.dots{display:flex;gap:6px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line);transition:background .2s,width .2s}
+.dots i.on{background:var(--lamp);width:20px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){
+  header.hero::after,.hero .eyebrow,.hero h1,.hero .lede,.hero .facts,.job,.step-detail p{animation:none}
+  .reveal{opacity:1;transform:none;transition:none}
+}
+
 @media (max-width:820px){
   section.chap{grid-template-columns:1fr;gap:18px;padding-block:40px}
   .chap-label{position:static}
   .grid2{grid-template-columns:1fr}
   .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .track{grid-auto-columns:85%}
   nav.top ul{gap:14px}
 }
 @media (max-width:480px){
@@ -232,13 +275,16 @@ html{scroll-behavior:smooth;scroll-padding-top:64px}
       <p>分類規則不是一開始就定好的。我先用簡單的工程／非工程二分法，在分類過程中遇到判斷不了的職缺，再回頭修正規則。</p>
     </div>
 
-    <ol class="steps">
-      <li><b>蒐集職缺</b><span>官網篩選「Taiwan + Internship」取得開放中的 20 筆，另補 8 筆已關閉職缺</span></li>
-      <li><b>記錄原文</b><span>Job ID、廠區、官網背景欄、工作內容與技能要求</span></li>
-      <li><b>依內容分類</b><span>不看職稱與背景欄，只看實際要做的事</span></li>
-      <li><b>標記技能</b><span>用固定詞彙表標記工具與能力，方便統計</span></li>
-      <li><b>統計與比對</b><span>分類比例、廠區分布、技能頻率、矛盾案例</span></li>
+    <div class="stack" style="gap:12px">
+    <ol class="steps" id="steps" role="tablist" aria-label="研究步驟">
+      <li role="tab" tabindex="0" aria-selected="true" data-k="Data source" data-d="開放中的 20 筆來自官網「Taiwan + Internship」篩選；另外 8 筆已關閉職缺，官網頁面已下架，內容改取自搜尋引擎保存的官網頁面，並逐筆打開官網確認狀態。"><b>蒐集職缺</b><span>官網篩選「Taiwan + Internship」取得開放中的 20 筆，另補 8 筆已關閉職缺</span></li>
+      <li role="tab" tabindex="-1" aria-selected="false" data-k="Fields" data-d="每筆記錄 Job ID、職稱、廠區、團隊、官網背景欄原文、工作內容摘要與刊登日期，背景欄一律照抄原文，方便之後比對職稱和內容是否一致。"><b>記錄原文</b><span>Job ID、廠區、官網背景欄、工作內容與技能要求</span></li>
+      <li role="tab" tabindex="-1" aria-selected="false" data-k="Rule" data-d="判斷時刻意不看職稱和背景欄，只看實際要做的事。規則在過程中修訂過一次：原本的「混合」改為「資管／數位」，因為偏資管的職缺被分進不同類別、標準不一致。"><b>依內容分類</b><span>不看職稱與背景欄，只看實際要做的事</span></li>
+      <li role="tab" tabindex="-1" aria-selected="false" data-k="Vocabulary" data-d="用 18 個固定詞彙標記工具與能力，例如 Excel、Power BI、SAP、Python、Coordination。同一件事只用同一個詞，才能正確計算出現次數。"><b>標記技能</b><span>用固定詞彙表標記工具與能力，方便統計</span></li>
+      <li role="tab" tabindex="-1" aria-selected="false" data-k="Analysis" data-d="用 Excel 公式統計分類比例、廠區分布與技能頻率，並把職稱或背景欄與內容不符的職缺標記出來，整理成下方的矛盾案例。"><b>統計與比對</b><span>分類比例、廠區分布、技能頻率、矛盾案例</span></li>
     </ol>
+    <div class="step-detail" id="step-detail" role="tabpanel" aria-live="polite"><span class="k">Data source</span><p>開放中的 20 筆來自官網「Taiwan + Internship」篩選；另外 8 筆已關閉職缺，官網頁面已下架，內容改取自搜尋引擎保存的官網頁面，並逐筆打開官網確認狀態。</p></div>
+    </div>
 
     <div class="stack" style="gap:14px">
       <h3>分類規則</h3>
@@ -262,7 +308,26 @@ html{scroll-behavior:smooth;scroll-padding-top:64px}
     <div class="stack" style="gap:14px">
       <h3>分類時發現的矛盾</h3>
       <p class="sub">這些案例說明只看職稱或背景欄篩職缺，會漏掉適合的、也會投錯。</p>
-      <div class="cases">
+      <div class="carousel">
+      <div class="track" id="track">
+        <div class="case">
+          <span class="type">職稱誤導</span>
+          <b>CS Application Engineer Internship</b>
+          <dl>
+            <dt>職稱</dt><dd>含 Engineer</dd>
+            <dt>技能要求</dt><dd>基本 Excel、PowerPoint</dd>
+            <dt>實際工作</dt><dd>活動支援、工時資料彙整、KPI dashboard 維護</dd>
+          </dl>
+        </div>
+        <div class="case">
+          <span class="type">職稱像 PM</span>
+          <b>CS Ops Project and Program</b>
+          <dl>
+            <dt>職稱</dt><dd>聽起來像專案管理</dd>
+            <dt>技能要求</dt><dd>很強的寫程式能力</dd>
+            <dt>實際工作</dt><dd>知識管理系統、用程式解決業務問題</dd>
+          </dl>
+        </div>
         <div class="case">
           <span class="type">職稱誤導</span>
           <b>EUV Technical Support Engineer</b>
@@ -288,6 +353,12 @@ html{scroll-behavior:smooth;scroll-padding-top:64px}
             <dt>背景欄</dt><dd>11 項全列 vs 只列 4 項</dd>
           </dl>
         </div>
+      </div>
+      <div class="car-nav">
+        <button type="button" id="car-prev" aria-label="上一個案例">←</button>
+        <div class="dots" id="dots" aria-hidden="true"></div>
+        <button type="button" id="car-next" aria-label="下一個案例">→</button>
+      </div>
       </div>
       <p class="sub">職稱含 Engineer、實際卻屬非工程的職缺共 <b class="mono" id="m-engtitle">4</b> 筆。</p>
     </div>
@@ -390,7 +461,7 @@ document.getElementById("legend").innerHTML = CATS.map(c=>`<span><i style="backg
 const maxLoc = Math.max(...LOCS.map(([l])=>cnt(j=>j.loc===l)));
 document.getElementById("locchart").innerHTML = LOCS.map(([l,n])=>{
   const rows = JOBS.filter(j=>j.loc===l);
-  const segs = CATS.map(c=>{const v=rows.filter(j=>j.cat===c.k).length; return v?`<span style="width:${v/maxLoc*100}%;background:${c.c}" title="${c.k} ${v} 筆"></span>`:"";}).join("");
+  const segs = CATS.map(c=>{const v=rows.filter(j=>j.cat===c.k).length; return v?`<span data-w="${v/maxLoc*100}" style="width:0;background:${c.c}" title="${c.k} ${v} 筆"></span>`:"";}).join("");
   return `<div class="stackrow"><span>${n}</span><div class="stackbar" role="img" aria-label="${n}：${CATS.map(c=>c.k+" "+rows.filter(j=>j.cat===c.k).length).join("、")}">${segs}</div><span class="n">${rows.length}</span></div>`;
 }).join("");
 
@@ -406,7 +477,7 @@ const axisMax = Math.ceil(maxS/4)*4;
 document.getElementById("skills").innerHTML =
   `<div class="scale" aria-hidden="true"><span></span><div><span>0</span><span>${axisMax/2}</span><span>${axisMax}</span></div><span></span></div>` +
   skillRows.map(r=>{
-    let x=0; const parts = r.by.map((v,i)=>{const w=v/axisMax*100; const el=v?`<span style="left:${x}%;width:${w}%;background:${CATS[i].c}"></span>`:""; x+=w; return el;}).join("");
+    let x=0; const parts = r.by.map((v,i)=>{const w=v/axisMax*100; const el=v?`<span data-w="${w}" style="left:${x}%;width:0;background:${CATS[i].c}"></span>`:""; x+=w; return el;}).join("");
     const label = SKN[r.s] ? `${SKN[r.s]} <span class="sub mono">${r.s}</span>` : r.s;
     return `<div class="skill"><span>${label}</span><div class="bars" role="img" aria-label="${r.s}：非工程 ${r.by[0]}、資管 ${r.by[1]}、工程 ${r.by[2]}">${parts}</div><span class="n">${r.t}</span></div>`;
   }).join("");
@@ -446,6 +517,64 @@ function render(){
   }).join("") : `<div class="empty">沒有符合條件的職缺，換個關鍵字或清除篩選試試。</div>`;
 }
 render();
+
+// ---- motion ----
+const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+const io = ("IntersectionObserver" in window) ? new IntersectionObserver((es)=>{
+  es.forEach(e=>{ if(!e.isIntersecting) return; const el=e.target; io.unobserve(el);
+    el.classList.add("in");
+    el.querySelectorAll("[data-w]").forEach(s=>{ s.style.width = s.dataset.w + "%"; });
+    el.querySelectorAll("[data-count]").forEach(countUp);
+  });
+},{threshold:.15}) : null;
+function countUp(el){
+  const end = +el.dataset.count, suf = el.dataset.suf || "";
+  if(reduce || !end){ el.innerHTML = end + suf; return; }
+  const t0 = performance.now(), dur = 900;
+  (function f(t){ const p=Math.min((t-t0)/dur,1); el.innerHTML = Math.round(end*(1-Math.pow(1-p,3))) + suf; if(p<1) requestAnimationFrame(f); })(t0);
+}
+document.querySelectorAll(".metric .v").forEach(v=>{
+  const m = v.textContent.match(/\d+/); if(!m) return;
+  v.dataset.count = m[0]; v.dataset.suf = v.querySelector("small") ? "<small>%</small>" : "";
+});
+const targets = [...document.querySelectorAll(".chap .stack > *, .pg .box, .metrics, .grid2 > .panel, .explorer, #product > .wrap > .panel")];
+if(io && !reduce){
+  const fold = window.innerHeight;
+  targets.forEach(el=>{ if(el.getBoundingClientRect().top > fold*0.9) el.classList.add("reveal"); io.observe(el); });
+} else {
+  document.querySelectorAll("[data-w]").forEach(s=>{ s.style.width = s.dataset.w + "%"; });
+}
+
+// stepper
+const steps = [...document.querySelectorAll("#steps li")];
+const det = document.getElementById("step-detail");
+function pick(li, focus){
+  steps.forEach(s=>{ const on = s===li; s.setAttribute("aria-selected", on); s.tabIndex = on?0:-1; });
+  det.innerHTML = `<span class="k">${esc(li.dataset.k)}</span><p>${esc(li.dataset.d)}</p>`;
+  if(focus) li.focus();
+}
+steps.forEach((li,i)=>{
+  li.addEventListener("click", ()=>pick(li));
+  li.addEventListener("keydown", e=>{
+    if(e.key==="Enter"||e.key===" "){ e.preventDefault(); pick(li); }
+    if(e.key==="ArrowRight"||e.key==="ArrowDown"){ e.preventDefault(); pick(steps[(i+1)%steps.length], true); }
+    if(e.key==="ArrowLeft"||e.key==="ArrowUp"){ e.preventDefault(); pick(steps[(i-1+steps.length)%steps.length], true); }
+  });
+});
+
+// case carousel
+const track = document.getElementById("track");
+const cards = [...track.children];
+const dots = document.getElementById("dots");
+dots.innerHTML = cards.map(()=>"<i></i>").join("");
+const dotEls = [...dots.children];
+function current(){ const x = track.scrollLeft; let best=0, bd=1e9; cards.forEach((c,i)=>{ const d=Math.abs(c.offsetLeft - track.offsetLeft - x); if(d<bd){bd=d;best=i;} }); return best; }
+function markDots(){ const c=current(); dotEls.forEach((d,i)=>d.classList.toggle("on", i===c)); }
+function go(i){ const c = cards[Math.max(0,Math.min(cards.length-1,i))]; track.scrollTo({left:c.offsetLeft - track.offsetLeft, behavior: reduce?"auto":"smooth"}); }
+document.getElementById("car-prev").addEventListener("click", ()=>go(current()-1));
+document.getElementById("car-next").addEventListener("click", ()=>go(current()+1));
+track.addEventListener("scroll", ()=>requestAnimationFrame(markDots), {passive:true});
+markDots();
 </script>
 
 </body>
