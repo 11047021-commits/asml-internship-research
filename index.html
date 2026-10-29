@@ -137,7 +137,7 @@ td.num,th.num{text-align:right;font-family:var(--font-mono);font-variant-numeric
 .count{font-size:13px;color:var(--muted);margin-left:auto}
 .jobs{display:grid;gap:10px}
 .job{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px}
-.job.closed{opacity:.78}
+.job.closed{opacity:.92}
 .job .t{font-weight:600;font-size:15px}
 .job .meta{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted);align-items:center}
 .job .meta .mono{color:var(--ink)}
@@ -526,7 +526,7 @@ const io = ("IntersectionObserver" in window) ? new IntersectionObserver((es)=>{
     el.querySelectorAll("[data-w]").forEach(s=>{ s.style.width = s.dataset.w + "%"; });
     el.querySelectorAll("[data-count]").forEach(countUp);
   });
-},{threshold:.15}) : null;
+},{threshold:0, rootMargin:"0px 0px -12% 0px"}) : null;
 function countUp(el){
   const end = +el.dataset.count, suf = el.dataset.suf || "";
   if(reduce || !end){ el.innerHTML = end + suf; return; }
