@@ -457,7 +457,7 @@ document.getElementById("mt-tn").textContent = cnt(j=>j.cat==="資管／數位" 
 document.getElementById("m-engtitle").textContent = cnt(j=>/Engineer/.test(j.t) && j.cat==="非工程");
 
 // location chart
-document.getElementById("legend").innerHTML = CATS.map(c=>`<span><i style="background:${c.c}"></i>${c.k}</span>`).join("");
+document.getElementById("legend").innerHTML = CATS.filter(c=>cnt(j=>j.cat===c.k)>0).map(c=>`<span><i style="background:${c.c}"></i>${c.k}</span>`).join("");
 const maxLoc = Math.max(...LOCS.map(([l])=>cnt(j=>j.loc===l)));
 document.getElementById("locchart").innerHTML = LOCS.map(([l,n])=>{
   const rows = JOBS.filter(j=>j.loc===l);
