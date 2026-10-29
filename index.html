@@ -281,7 +281,7 @@ html{scroll-behavior:smooth;scroll-padding-top:64px}
       <li role="tab" tabindex="-1" aria-selected="false" data-k="Fields" data-d="每筆記錄 Job ID、職稱、廠區、團隊、官網背景欄原文、工作內容摘要與刊登日期，背景欄一律照抄原文，方便之後比對職稱和內容是否一致。"><b>記錄原文</b><span>Job ID、廠區、官網背景欄、工作內容與技能要求</span></li>
       <li role="tab" tabindex="-1" aria-selected="false" data-k="Rule" data-d="判斷時刻意不看職稱和背景欄，只看實際要做的事。規則在過程中修訂過一次：原本的「混合」改為「資管／數位」，因為偏資管的職缺被分進不同類別、標準不一致。"><b>依內容分類</b><span>不看職稱與背景欄，只看實際要做的事</span></li>
       <li role="tab" tabindex="-1" aria-selected="false" data-k="Vocabulary" data-d="用 18 個固定詞彙標記工具與能力，例如 Excel、Power BI、SAP、Python、Coordination。同一件事只用同一個詞，才能正確計算出現次數。"><b>標記技能</b><span>用固定詞彙表標記工具與能力，方便統計</span></li>
-      <li role="tab" tabindex="-1" aria-selected="false" data-k="Analysis" data-d="用 Excel 公式統計分類比例、廠區分布與技能頻率，並把職稱或背景欄與內容不符的職缺標記出來，整理成下方的矛盾案例。"><b>統計與比對</b><span>分類比例、廠區分布、技能頻率、矛盾案例</span></li>
+      <li role="tab" tabindex="-1" aria-selected="false" data-k="Analysis" data-d="用 Excel 公式統計分類比例、廠區分布與技能頻率，並把職稱或背景欄與內容不符的職缺標記出來，整理成下方的落差案例。"><b>統計與比對</b><span>分類比例、廠區分布、技能頻率、落差案例</span></li>
     </ol>
     <div class="step-detail" id="step-detail" role="tabpanel" aria-live="polite"><span class="k">Data source</span><p>開放中的 20 筆來自官網「Taiwan + Internship」篩選；另外 8 筆已關閉職缺，官網頁面已下架，內容改取自搜尋引擎保存的官網頁面，並逐筆打開官網確認狀態。</p></div>
     </div>
@@ -306,12 +306,12 @@ html{scroll-behavior:smooth;scroll-padding-top:64px}
     </div>
 
     <div class="stack" style="gap:14px">
-      <h3>分類時發現的矛盾</h3>
-      <p class="sub">這些案例說明只看職稱或背景欄篩職缺，會漏掉適合的、也會投錯。</p>
+      <h3>職稱與實際內容的落差</h3>
+      <p class="sub">整理過程中，我發現職稱和背景欄不一定能反映實際工作。這些案例讓我學會先看工作內容，再判斷職缺適不適合自己。</p>
       <div class="carousel">
       <div class="track" id="track">
         <div class="case">
-          <span class="type">職稱誤導</span>
+          <span class="type">職稱含 Engineer</span>
           <b>CS Application Engineer Internship</b>
           <dl>
             <dt>職稱</dt><dd>含 Engineer</dd>
@@ -320,7 +320,7 @@ html{scroll-behavior:smooth;scroll-padding-top:64px}
           </dl>
         </div>
         <div class="case">
-          <span class="type">職稱像 PM</span>
+          <span class="type">職稱偏專案管理</span>
           <b>CS Ops Project and Program</b>
           <dl>
             <dt>職稱</dt><dd>聽起來像專案管理</dd>
@@ -329,7 +329,7 @@ html{scroll-behavior:smooth;scroll-padding-top:64px}
           </dl>
         </div>
         <div class="case">
-          <span class="type">職稱誤導</span>
+          <span class="type">職稱含 Engineer</span>
           <b>EUV Technical Support Engineer</b>
           <dl>
             <dt>背景欄</dt><dd>理工科系 7 項</dd>
@@ -338,7 +338,7 @@ html{scroll-behavior:smooth;scroll-padding-top:64px}
           </dl>
         </div>
         <div class="case">
-          <span class="type">背景欄誤導</span>
+          <span class="type">背景欄與內容不同</span>
           <b>CS Office Coordinator</b>
           <dl>
             <dt>背景欄</dt><dd>Other technical backgrounds</dd>
@@ -511,7 +511,7 @@ function render(){
       <div class="right"><span class="pill ${c.cls}">${esc(j.cat)}</span><span class="st ${j.st==="開放中"?"open":""}">${j.st==="開放中"?"● 開放中":"○ 已關閉"}</span></div>
       ${j.sum?`<p class="sumtx">${esc(j.sum)}</p>`:""}
       <p class="why">${j.cat==="待分類"?"新職缺，等待作者分類":"分類理由："+esc(j.why)}</p>
-      <div class="tags">${j.sk.map(s=>`<span class="chip">${esc(s)}</span>`).join("")}${j.x?`<span class="flag">職稱或背景欄與內容矛盾</span>`:""}<span style="margin-left:auto">${link}</span></div>
+      <div class="tags">${j.sk.map(s=>`<span class="chip">${esc(s)}</span>`).join("")}${j.x?`<span class="flag">職稱或背景欄與內容有落差</span>`:""}<span style="margin-left:auto">${link}</span></div>
     </article>`;
   }).join("") : `<div class="empty">沒有符合條件的職缺，換個關鍵字或清除篩選試試。</div>`;
 }
